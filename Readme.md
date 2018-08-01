@@ -3,6 +3,11 @@
 本地bzoj评测软件，只兼容Linux系统。
 具体评测方法是从bzoj.download下载数据然后实现本地评测。
 
+效果如下：
+
+![](http://wx2.sinaimg.cn/mw690/0060lm7Tly1ftuod6ntlej30p50ga40g.jpg)
+![](http://wx2.sinaimg.cn/mw690/0060lm7Tly1ftuod3w9c6j30mn0kstas.jpg)
+
 需要安装alex下载包
 ```
 sudo apt install alex
