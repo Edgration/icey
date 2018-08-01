@@ -1,9 +1,9 @@
 # bzoj-checker
 
-本地bzoj评测软件，只实用于Linux系统。
+本地bzoj评测软件，只兼容Linux系统。
 具体评测方法是从bzoj.download下载数据然后实现本地评测。
 
-需要安装alex
+需要安装alex下载包
 ```
 sudo apt install alex
 ``` 
