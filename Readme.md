@@ -6,7 +6,7 @@
 需要安装alex
 ```
 sudo apt install alex
-```
+``` 
 或者是
 ```
 cd [下载的位置]
