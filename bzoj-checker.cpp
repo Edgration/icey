@@ -56,6 +56,7 @@ IL int READ(string &name) {
 char ttemp[1000]; char ttemp2[1000];
 char data_num_char[1000];
 char book[1000][1000];
+bool cmps(string a, string b) { return READ(a) < READ(b); }
 int work(int num, string num_string, string dir) {
 	if (!(num >= 1000 && num <= 5000)) myexit();
 
@@ -96,21 +97,21 @@ int work(int num, string num_string, string dir) {
 	int ct = 1; int eded = 0;
 	
 	/* compile */
-	
+	vector<string>lli;
 	while (~fscanf(list, "%s", book[ct])) {
 		string temp = book[ct];
 		if (temp == "test") CeFlag = 0, ct--;
-		else eded = ct;
+		else eded = ct; lli.push_back(temp);
 		ct++;
 	}
 	ct--; system("rm list.txt");
-	
+	sort(lli.begin(), lli.end(), cmps);
 	/* test */
 	map<string, bool>tested; tested.clear();
 	
 	printf("\n=========================================================\n");
 	for (int cr = 1; cr <= ct; ++cr) {
-		string data_num = book[cr];
+		string data_num = lli[cr - 1];
 		if (data_num == "list.txt" || data_num == "test") continue;
 		string Fr = (string)"echo " + data_num + string(" | cut -d. -f1") + (string)" > Fr";
 		string Su   = (string)"echo " + data_num + string(" | cut -d. -f2") + (string)" > Su"; 	
