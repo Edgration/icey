@@ -210,7 +210,7 @@ int work2(int num, string num_string, string dir) {
 	/* test */
 	map<string, bool>tested; tested.clear();
 	
-	printf("\n============================================================\n");
+	printf("\n================================================================\n");
 	
 	for (int cr = 1; cr <= ct; ++cr) {
 		string data_num = lli[cr - 1];
@@ -227,14 +227,14 @@ int work2(int num, string num_string, string dir) {
 		if (tested[Front]) continue;
 		else tested[Front] = 1;
 		
-		printf("|%8s    ", Front.c_str());
+		printf("|%12s    ", Front.c_str());
 		fflush(stdout);
 			
 		if (CeFlag == 1) {
 			printf("|         \033[3;43m CompileError \033[0m         |");
 			fflush(stdout);
 			printf("     --     |\n"); fflush(stdout);
-			if (cr != ct - 1) printf("------------------------------------------------------------\n");
+			if (cr != ct - 1) printf("----------------------------------------------------------------\n");
 			continue;
 		}
 			
@@ -268,13 +268,13 @@ int work2(int num, string num_string, string dir) {
 			printf("%8ss   |\n", ttemp); fflush(stdout);
 		} //AC
 		system("rm ans"); system("rm checker"); system("rm time_cnt");
-		if (cr < eded - 1) printf("------------------------------------------------------------\n");
+		if (cr < eded - 1) printf("----------------------------------------------------------------\n");
 	};
 	if (!CeFlag) {
 		string des = (string)"rm " + exedir;
 		system(des.c_str()); 
 	}
-	printf("============================================================\n\n");
+	printf("================================================================\n\n");
 	
 	/* end data */
 }
@@ -289,7 +289,7 @@ int main(int argc, char *argv[]) {
 		} 
 		else if (pre == "-l" || pre == "--local") {
 			string num = argv[2]; string dir = argv[3]; 
-			work(0, num, dir);
+			work2(0, num, dir);
 		} 
 		else {
 			myexit(); return 0;
