@@ -176,6 +176,13 @@ int work(int num, string num_string, string dir) {
 	/* end data */
 }
 
+IL string getSuf(string A) {
+	int Len = A.size();
+	int pos = 0;
+	for (int i = 0; i < Len; ++i) if (A[i] == '.') pos = i;
+	return A.substr(pos + 1, Len - pos + 1); 	
+}	
+
 int work2(int num, string num_string, string dir) {
 	
 	string dow = (string)"wget " + (string)" -d " + num_string + string(" ") + num_string;
@@ -199,12 +206,17 @@ int work2(int num, string num_string, string dir) {
 	
 	/* compile */
 	vector<string>lli;
+	string Ans_Or_Out;
 	while (~fscanf(list, "%s", book[ct])) {
 		string temp = book[ct]; 
 		if (temp == "test") CeFlag = 0, ct--;
 		else eded = ct; lli.push_back(temp);
+		
+		string t_t = getSuf(temp);
+		if (t_t != "in" && t_t != "est") Ans_Or_Out = t_t;
 		ct++;
 	}
+	
 	ct--; system("rm list.txt");
 	sort(lli.begin(), lli.end(), cmps);
 	/* test */
@@ -243,7 +255,8 @@ int work2(int num, string num_string, string dir) {
 		
 		//cerr << doit << endl;
 		system(doit.c_str());
-		string chk  = "diff -b -q checker " + num_string + string("/") + Front + string(".out >ans");  
+		string chk  = "diff -b -q checker " + num_string + string("/") + Front + string(".")
+		+ Ans_Or_Out + string(" >ans");  
 		system(chk.c_str()); 
 		FILE *cur = freopen("ans", "r", stdin);
 		fscanf(cur, "%s", ttemp);
@@ -275,8 +288,7 @@ int work2(int num, string num_string, string dir) {
 		system(des.c_str()); 
 	}
 	printf("================================================================\n\n");
-	
-	/* end data */
+	system("rm list2.txt");
 }
 
 int main(int argc, char *argv[]) {
