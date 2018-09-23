@@ -43,7 +43,7 @@ sudo rm /usr/bin/icey
 ```
 ### 使用说明
 
-#### ![](https://github.com/Edgration/icey/blob/master/images/Screenshot%20from%202018-09-23%2023-02-32.png)
+#### ![](https://github.com/Edgration/icey/blob/master/images/Screenshot-from-2018-09-23-23-02-32.png?raw=true)
 
 #### 本地评测
 
