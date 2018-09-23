@@ -30,44 +30,44 @@ namespace constant {
 	
 	string AK  = "\033[42m       All Killed      \033[0m";
 	string PC  = "\033[43m   Partically Correct  \033[0m";
-	string GG  = "\033[41m  E  \033[0m";
+	string GG  = "\033[41m        Exploded       \033[0m";
 	string END_c = "\033[0m";
 } using namespace constant;
 
 namespace error {
 	void access_fail(string str) {
-		cout << "jdg: cannot access '" << str << "': No such file or directory" << endl;
+		cout << "icey: cannot access '" << str << "': No such file or directory" << endl;
 	}
 	void cannot_find_data(string str) {
-		cout << "jdg: cannot find data at " << str << endl;
+		cout << "icey: cannot find data at " << str << endl;
 	}
 	void data_code_missing_print() {
-		cout << "jdg: missing data or code operand" << endl;
-		cout << "Try 'jdg --help' for more information." << endl;
+		cout << "icey: missing data or code operand" << endl;
+		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void argument_missing_print(string str) {
-		cout << "jdg: option requires an argument -- '" << str << "'" << endl;
-		cout << "Try 'jdg --help' for more information." << endl;
+		cout << "icey: option requires an argument -- '" << str << "'" << endl;
+		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void invalid_print(string str) {
-		cout << "jdg: invalid option -- '" << str << "'" << endl;
-		cout << "Try 'jdg --help' for more information." << endl;
+		cout << "icey: invalid option -- '" << str << "'" << endl;
+		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void error_print(string str) {
-		cout << "jdg: some thing error at '" << str << "'" << endl;
-		cout << "Try 'jdg --help' for more information." << endl; 
+		cout << "icey: some thing error at '" << str << "'" << endl;
+		cout << "Try 'icey --help' for more information." << endl; 
 	}
   	void system_error() {
-  		cout << "jdg: unknown system error" << endl;
+  		cout << "icey: unknown system error" << endl;
   	}
 } using namespace error;
 
 namespace tool {
-	bool StartWith(string mainstr, string substr) {
+	bool start_with(string mainstr, string substr) {
 		if (mainstr.length() < substr.length()) return false;
 		return mainstr.find(substr) == 0 ? true : false;
 	}
-	bool EndWith(string mainstr, string substr) {
+	bool end_with(string mainstr, string substr) {
 		if (mainstr.length() < substr.length()) return false;
 		return mainstr.find(substr) == mainstr.length() - substr.length() ? true : false;
 	}
@@ -131,7 +131,7 @@ namespace tool {
 
  
 /*
-Usage: jdg [OPTION]... DATA... CODE...
+Usage: icey [OPTION]... DATA... CODE...
 Judge the code with data and illustrate the results with a chart
 
 Mandatory arguments to long options are mandatory for short options too.
@@ -148,7 +148,7 @@ Mandatory arguments to long options are mandatory for short options too.
 namespace option {
 	bool help_check(string &str) { return str == "-h" || str == "--help";  }
 	void help_print() {
-		cout << "Usage: jdg [OPTION]... DATA... CODE..." << endl;
+		cout << "Usage: icey [OPTION]... DATA... CODE..." << endl;
 		cout << "Judge the code with data and illustrate the results with a chart" << endl;
 		cout << endl;
 		cout << "Mandatory arguments to long options are mandatory for short options too." << endl;
@@ -162,17 +162,17 @@ namespace option {
 
 	bool version_check(string &str) { return str == "-v" || str == "--version"; }
 	void version_print() {
-		cout << "jdg (LocalJudge) " << VERSION << endl;
+		cout << "icey (LocalJudge) " << VERSION << endl;
 		cout << "Copyright (C) 2018 " << endl;
 		cout << "Code by Anoxiacxy. <https://anoxiacxy.github.io>" << endl;
 	}
 
-	bool time_check(string str) { if (!(StartWith(str, "-t") || StartWith(str, "--time"))) return false; }
+	bool time_check(string str) { if (!(start_with(str, "-t") || start_with(str, "--time"))) return false; }
 	void time_set(string str) {
 		int pos = str.find('=');
 		if (pos == -1) {
-			if (StartWith(str, "-t")) { argument_missing_print("-t"); exit(-1); }
-			if (StartWith(str, "--time")) { argument_missing_print("--time"); exit(-1); }
+			if (start_with(str, "-t")) { argument_missing_print("-t"); exit(-1); }
+			if (start_with(str, "--time")) { argument_missing_print("--time"); exit(-1); }
 			error_print(str); exit(0);
 		}
 		istringstream sin(str.substr(pos + 1, str.length() - pos - 1));
@@ -230,16 +230,14 @@ namespace check {
 	struct Result test(string data_dir, pair<string, string>data_test) {
 		pid_t timepid, codepid;
 		struct timeval start, end, time;
-		data_test.first  = data_dir + "/" + data_test.first;
-		data_test.second = data_dir + "/" + data_test.second;
-		string output = data_dir + "/" + ".out", errput = data_dir + "/" + ".err", temp;
+		string temp;
 		codepid = fork();
 		if (codepid == 0) {
 			
 			//exec();
 			ostringstream cmd;
 			cmd << "cd " << data_dir << endl;			
-			cmd << "./" << EXE << " < " << data_test.first << " 1> " << output << " 2>" << errput << endl;
+			cmd << "./" << EXE << " < " << data_test.first << " 1> " << OUT << " 2>" << ERR << endl;
 			system(cmd.str().c_str());
 			//
 			exit(EXIT_SUCCESS);
@@ -275,7 +273,7 @@ namespace check {
 		
 		rst.time = time.tv_sec + time.tv_usec / 1e6;
 		
-		ifstream fin(errput);
+		ifstream fin(data_dir + "/" + ERR);
 		if (fin >> temp) {//RE
 			rst.type = RE;
 			rst.score = 0;
@@ -284,8 +282,12 @@ namespace check {
 		fin.close();
 		
 		ostringstream cmd;
-		cmd << "diff -b -q " << data_test.second << " " << output << " > " << errput << endl;	
-		fin.open(errput);
+		cmd << "cd " << data_dir << endl;
+		cmd << "diff -b -q " << data_test.second << " " << OUT << " > " << ERR << endl;	
+		//cout << cmd.str() << endl;
+		system(cmd.str().c_str());
+		
+		fin.open(data_dir + "/" + ERR);
 		if (fin >> temp) {//WA
 			rst.type = WA;
 			rst.score = 0;
@@ -309,10 +311,10 @@ namespace check {
 		map<int, pair<string, string> > test_data;
 		
 		for (auto str : data_list) {
-			if (EndWith(str, IN_SUFFIX)) 
+			if (end_with(str, IN_SUFFIX)) 
 				test_data[read_num(str)].first = str;	
 			
-			if (EndWith(str, OUT_SUFFIX)) 
+			if (end_with(str, OUT_SUFFIX)) 
 				test_data[read_num(str)].second = str;	
 		}
 		
@@ -363,7 +365,7 @@ namespace check {
 		
 		all_rst.print();
 		
-		clean(data_dir);
+		//clean(data_dir);
 	}
 } using namespace check;
 
