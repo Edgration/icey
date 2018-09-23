@@ -10,7 +10,7 @@ icey [OPTION]... DATA... CODE...
 ****
 ### 什么是 icey ?
 
-icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https://anoxiacxy.github.io) 和 [Edgration](www.)
+icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https://anoxiacxy.github.io) 和 [Edgration](http://www.edgration.com)
 
 你可以用简短的几句命令，对您的程序进行快速，精确地评测，并得到一份关于评测的报告。
 
@@ -43,7 +43,7 @@ sudo rm /usr/bin/icey
 ```
 ### 使用说明
 
-#### ![](images/Screenshot from 2018-09-23 23-02-32.png)
+#### ![](https://github.com/Edgration/icey/blob/master/images/Screenshot%20from%202018-09-23%2023-02-32.png)
 
 #### 本地评测
 
