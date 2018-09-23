@@ -137,9 +137,8 @@ Judge the code with data and illustrate the results with a chart
 Mandatory arguments to long options are mandatory for short options too.
   -i, --input-suffix=IN
   -o, 
-  -c, -C[] 
-  -t, --time-limit=SECOND      
-                         set the time limit of each test with a variable
+  -c, -C[]  
+  -t, --time=SECOND      set the time limit of each test with a variable
                          of type double, default value will be 1 second
   -h, --help     display this help and exit
   -v, --version  output version information and exit                         
@@ -202,7 +201,7 @@ namespace check {
 		double score;
 		double time;
 		double memory;
-		void print() {
+		void print(bool last = false) {
 			char tmp[20];
 			sprintf(tmp, "%.3fms", time * 1000);
 
@@ -223,7 +222,10 @@ namespace check {
 			else 
 				time_s = show_center(time_s, 13);
 			cout << "|  " << name << "  |   " << type << "   |   " << score_s << "   |   " << time_s << "   |" << endl;  
-			cout << "--------------------------------------------------------------------------------" << endl;
+			if (!last)
+				cout << "--------------------------------------------------------------------------------" << endl;
+			else 
+				cout << "================================================================================" << endl;
 		}
 	};
 
@@ -273,7 +275,8 @@ namespace check {
 		
 		rst.time = time.tv_sec + time.tv_usec / 1e6;
 		
-		ifstream fin(data_dir + "/" + ERR);
+		ifstream fin;
+		fin.open(data_dir + "/" + ERR);
 		if (fin >> temp) {//RE
 			rst.type = RE;
 			rst.score = 0;
@@ -332,10 +335,10 @@ namespace check {
 		
 		//cout << "test()" << endl;
 		
-		string head = show_center("==" + name + "==", 80);
+		string head = show_center("--- " + name + " ---", 80);
 		
 		cout << head << endl;
-		cout << "--------------------------------------------------------------------------------" << endl;			
+		cout << "================================================================================" << endl;			
 		
 		Result all_rst;
 		all_rst.score = 0;
@@ -344,9 +347,8 @@ namespace check {
 		
 		bool ak = true, gg = true;
 		
-		
-		
 		for (auto test_p : test_data) {
+			
 			struct Result rst = test(data_dir, test_p.second);
 			rst.name = name + to_string(test_p.first);
 			rst.score *= (1.0 / test_data.size());
@@ -356,16 +358,18 @@ namespace check {
 			ak &= rst.type == AC;
 			gg &= rst.type != AC;
 			
-			rst.print();			
+			if (test_p == *test_data.rbegin()) 
+				rst.print(true);
+			else 	rst.print();			
 		}
 		
 		if (gg) all_rst.type = GG;
 		else if (ak) all_rst.type = AK;
 		else all_rst.type = PC;
 		
-		all_rst.print();
+		all_rst.print(true);
 		
-		//clean(data_dir);
+		clean(data_dir);
 	}
 } using namespace check;
 
