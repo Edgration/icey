@@ -12,7 +12,7 @@ using namespace std;
 
 namespace constant {
 	double TIME = 1;
-	string VERSION = "1.1.0";
+	string VERSION = "1.1.1";
 	string IN_SUFFIX = ".in";
 	string OUT_SUFFIX = ".out";
 	//string PREFIX = "";
