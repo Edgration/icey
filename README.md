@@ -10,7 +10,7 @@ icey [OPTION]... DATA... CODE...
 ****
 ### 什么是 icey ?
 
-icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https://anoxiacxy.github.io) 和 [Edgration](www.)
+icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https://anoxiacxy.github.io) 和 [Edgration](http://edgration.com/)
 
 你可以用简短的几句命令，对您的程序进行快速，精确地评测，并得到一份关于评测的报告。
 
@@ -24,8 +24,7 @@ icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https:/
 
 ``` bash
 git clone https://github.com/Edgration/icey.git
-cd icey
-sudo cp icey /usr/bin/
+sudo cp icey/icey /usr/bin/
 ```
 
 对于没有安装 `git` 的童鞋，可以使用以下命令安装
@@ -47,7 +46,7 @@ sudo rm /usr/bin/icey
 
 #### 本地评测
 
-```
+```bash
 icey [OPTION]... DATA... CODE...
 ```
 
@@ -109,7 +108,7 @@ icey 会从目录中识别此格式的文件并配对，测试数据的名称可
 
 - ~~MLE：Memory Limit Exceeded，超出内存限制。~~
 
-- UKE：Unknown Error，出现未知错误
+- UKE：Unknown Error，出现未知错误， 请检查数据包是否命名正确。
 
 最终评测结果
 
@@ -117,13 +116,38 @@ icey 会从目录中识别此格式的文件并配对，测试数据的名称可
 
 - PC：Partially Correct，部分正确。
 
-- GG：Exploed，很不幸，你爆零了。 
+- GG：Exploded，很不幸，你爆零了。 
   
 
 ### FAQ
 
 
 
+### 更新日志
+
+#### v1.1.0
+
+- 新增自定义编译选项，现在可以自由地选择开启 -CO2 优化了
+
+#### v1.0.3
+
+- 新增评测结果 CE, UKE
+
+#### v1.0.2
+
+- 现在可以同时使用相对路径和绝对路径来评测了
+- 略微修改分数的显示效果，**爆零结果温馨提示**
+
+#### v1.0.1
+
+- 修复了无法判断 WA 的 Bug
+- 添加了最终评测结果的统计显示
+
+#### v1.0.0 
+
+- 添加评测功能
+- 评测结果彩色显示
+- 自定义测试点时限
 
 
 

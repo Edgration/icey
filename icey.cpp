@@ -12,7 +12,7 @@ using namespace std;
 
 namespace constant {
 	double TIME = 1;
-	string VERSION = "1.0.0";
+	string VERSION = "1.1.0";
 	string IN_SUFFIX = ".in";
 	string OUT_SUFFIX = ".out";
 	//string PREFIX = "";
@@ -128,20 +128,18 @@ namespace tool {
 	}
 } using namespace tool;
 
-
- 
 /*
 Usage: icey [OPTION]... DATA... CODE...
 Judge the code with data and illustrate the results with a chart
 
 Mandatory arguments to long options are mandatory for short options too.
-  -i, --input-suffix=IN
-  -o, 
-  -c, -C[]  
+
+  -c, -C...              add some compilation options you need for g++ 
+                         '-CO2 -Cstd=c++11' will represent '-O2 -std=c++11'
   -t, --time=SECOND      set the time limit of each test with a variable
                          of type double, default value will be 1 second
   -h, --help     display this help and exit
-  -v, --version  output version information and exit                         
+  -v, --version  output version information and exit
 */
 
 namespace option {
@@ -152,6 +150,8 @@ namespace option {
 		cout << endl;
 		cout << "Mandatory arguments to long options are mandatory for short options too." << endl;
 		cout << endl;
+		cout << "  -c, -C...              add some compilation options you need for g++ " << endl;
+		cout << "                         '-CO2 -Cstd=c++11' will represent '-O2 -std=c++11'" << endl;
 		cout << "  -t, --time=SECOND      set the time limit of each test with a variable" << endl;
 		cout << "                         of type double, default value will be 1 second" << endl;
 		cout << "  -h, --help     display this help and exit" << endl;
@@ -163,10 +163,12 @@ namespace option {
 	void version_print() {
 		cout << "icey (LocalJudge) " << VERSION << endl;
 		cout << "Copyright (C) 2018 " << endl;
-		cout << "Code by Anoxiacxy. <https://anoxiacxy.github.io>" << endl;
+		cout << "Code by" << endl; 
+		cout << "        Anoxiacxy <https://anoxiacxy.github.io>" << endl;
+		cout << "        Edgration <https://edgration.com>" << endl;
 	}
 
-	bool time_check(string str) { if (!(start_with(str, "-t") || start_with(str, "--time"))) return false; }
+	bool time_check(string str) { return start_with(str, "-t") || start_with(str, "--time"); }
 	void time_set(string str) {
 		int pos = str.find('=');
 		if (pos == -1) {
@@ -177,24 +179,35 @@ namespace option {
 		istringstream sin(str.substr(pos + 1, str.length() - pos - 1));
 		sin >> TIME;
 	}
+	bool complie_check(string str) { return start_with(str, "-c") || start_with(str, "-C"); }
+	void complie_set(string str) {
+		if (str.length() <= 2) {
+			if (start_with(str, "-c")) { argument_missing_print("-c"); exit(-1); }
+			if (start_with(str, "-C")) { argument_missing_print("-C"); exit(-1); }
+			error_print(str); exit(0);
+		}
+		str = "-" + str.substr(2, str.length() - 2);
+		COMPLIE_ARGUMENT += str + " ";
+	}
 } using namespace option;
 
 namespace check {
 	void complie(string data_dir, string code_dir) {
 		ostringstream cmd;
-		cmd << "g++ " << COMPLIE_ARGUMENT << " " << code_dir << " -o " << data_dir << "/" << EXE << endl;
-		if (system(cmd.str().c_str())) exit(-1);
+		cmd << "g++ " << COMPLIE_ARGUMENT << " " << code_dir;
+		cmd << " -o " << data_dir << "/" << EXE << " 2> " << data_dir << "/" << ERR << endl;
+		system(cmd.str().c_str()); 
 	}
 
 	void clean(string data_dir) {
 		ostringstream cmd;
 		cmd << "cd " << data_dir << endl;
-		cmd << "rm " << EXE << endl;
-		cmd << "rm " << OUT << endl;
+		cmd << "rm " << EXE << " 2> " << ERR << endl;
+		cmd << "rm " << OUT << " 2> " << ERR << endl;
 		cmd << "rm " << ERR << endl;
-		if (system(cmd.str().c_str())) exit(-1);
+		system(cmd.str().c_str());
 	}
-
+	
 	struct Result {
 		string type;
 		string name;
@@ -204,11 +217,7 @@ namespace check {
 		void print(bool last = false) {
 			char tmp[20];
 			sprintf(tmp, "%.3fms", time * 1000);
-
-			// name length = 16
-			// type length = 23
-			// score length = 9
-			// time length = 12
+			
 			name = show_center(name, 12);
 			string time_s(tmp), score_s; 
 			if (score == int(score))
@@ -230,18 +239,31 @@ namespace check {
 	};
 
 	struct Result test(string data_dir, pair<string, string>data_test) {
+		Result rst;
+		if (access((data_dir + "/" + EXE).c_str(), 0) == -1) {//CE
+			rst.type = CE;
+			rst.score = 0;
+			rst.time = -1;
+			return rst;
+		}
+		if (access((data_dir + "/" + data_test.first).c_str(), 0) == -1 ||//UKE
+			access((data_dir + "/" + data_test.second).c_str(), 0) == -1) {//UKE
+			rst.type = UKE;
+			rst.score = 0;
+			rst.time = -1;
+			return rst;
+		}
 		pid_t timepid, codepid;
 		struct timeval start, end, time;
 		string temp;
 		codepid = fork();
-		if (codepid == 0) {
-			
-			//exec();
+		if (codepid == 0) {			
 			ostringstream cmd;
+			
 			cmd << "cd " << data_dir << endl;			
 			cmd << "./" << EXE << " < " << data_test.first << " 1> " << OUT << " 2>" << ERR << endl;
 			system(cmd.str().c_str());
-			//
+			
 			exit(EXIT_SUCCESS);
 		}
 		timepid = fork();
@@ -250,30 +272,23 @@ namespace check {
  			exit(EXIT_SUCCESS);
 		}
 		
-		
 		gettimeofday(&start, NULL);
 		pid_t firstpid = wait(NULL);
 		gettimeofday(&end, NULL);
 		timersub(&end, &start, &time);
-		
+		rst.time = time.tv_sec + time.tv_usec / 1e6;
+				
 		kill(timepid ^ codepid ^ firstpid, SIGKILL);
 		
 		wait(NULL);
+		wait(NULL);
 		
-		Result rst;
-		/*
-		time
-		type
-		score
-		*/
 		if (firstpid == timepid) {//TLE
 			rst.time = -1;
 			rst.type = TLE;
 			rst.score = 0;
 			return rst;
 		}
-		
-		rst.time = time.tv_sec + time.tv_usec / 1e6;
 		
 		ifstream fin;
 		fin.open(data_dir + "/" + ERR);
@@ -287,7 +302,6 @@ namespace check {
 		ostringstream cmd;
 		cmd << "cd " << data_dir << endl;
 		cmd << "diff -b -q " << data_test.second << " " << OUT << " > " << ERR << endl;	
-		//cout << cmd.str() << endl;
 		system(cmd.str().c_str());
 		
 		fin.open(data_dir + "/" + ERR);
@@ -306,10 +320,10 @@ namespace check {
 	void work(string data_dir, string code_dir) {
 		if (access(data_dir.c_str(), 0) == -1) access_fail(data_dir), exit(-1);
 		if (access(code_dir.c_str(), 0) == -1) access_fail(code_dir), exit(-1);	
-		
+
 		vector<string>data_list = get_list(data_dir);
 		
-		//cout << "list()" << endl;
+		clean(data_dir);
 		
 		map<int, pair<string, string> > test_data;
 		
@@ -326,18 +340,11 @@ namespace check {
 		string name = "";
 		string temp = test_data.begin()->second.first.length() ? 
 			test_data.begin()->second.first : test_data.begin()->second.second;
-		
 		for (int i = 0; i < temp.length() && !isdigit(temp[i]); i++) name += temp[i];
-		
-		//cout << "complie()" << endl;	
 			
 		complie(data_dir, code_dir);
-		
-		//cout << "test()" << endl;
-		
-		string head = show_center("--- " + name + " ---", 80);
-		
-		cout << head << endl;
+				
+		cout << show_center("--- " + name + " ---", 80) << endl;		
 		cout << "================================================================================" << endl;			
 		
 		Result all_rst;
@@ -373,8 +380,8 @@ namespace check {
 	}
 } using namespace check;
 
-int main (int argc, char const* argv[])
-{
+int main (int argc, char const* argv[]) {
+
 	vector<string>option;
 	for (int i = 1; i < argc; i++) 
 		if (argv[i][0] == '-') 
@@ -386,11 +393,11 @@ int main (int argc, char const* argv[])
 		if (version_check(str)) { version_print(); exit(0); }
 		else 
 		if (time_check(str)) { time_set(str); }
+		else 
+		if (complie_check(str)) { complie_set(str); }
 		else { invalid_print(str); exit(-1); }
 	}
 			
-	//
-	
 	string data_dir, code_dir;
 	
 	 for (int i = 1; i < argc; i++) if (argv[i][0] != '-') {
