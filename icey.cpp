@@ -164,8 +164,8 @@ namespace option {
 		cout << "icey (LocalJudge) " << VERSION << endl;
 		cout << "Copyright (C) 2018 " << endl;
 		cout << "Code by" << endl; 
-		cout << "        Anoxiacxy <https://anoxiacxy.github.io>" << endl;
 		cout << "        Edgration <https://edgration.com>" << endl;
+		cout << "        Anoxiacxy <https://anoxiacxy.github.io>" << endl;
 	}
 
 	bool time_check(string str) { return start_with(str, "-t") || start_with(str, "--time"); }
