@@ -47,7 +47,7 @@ sudo rm /usr/bin/icey
 
 ### Usage
 
-#### ![](/home/edgration/images/Screenshot-from-2018-09-23-23-41-56.png)
+#### ![](images/Screenshot-from-2018-09-23-23-41-56.png)
 
 #### Local Judge
 
