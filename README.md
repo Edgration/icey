@@ -1,6 +1,6 @@
 ##  Icey Local Judge
 ****
-![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.1-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
+![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.0-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
 
 欢迎使用 icey，本文档将帮助你快速上手。如果您在使用的过程中遇到了问题，请查看 FAQ 中的解答，或者在本项目下经行提问。
 
@@ -129,6 +129,10 @@ icey 会从目录中识别此格式的文件并配对，测试数据的名称可
 
 ### 更新日志
 
+#### v1.1.1
+
+- 新增英文文档
+
 #### v1.1.0
 
 - 新增自定义编译选项，现在可以自由地选择开启 -CO2 优化了
@@ -152,4 +156,10 @@ icey 会从目录中识别此格式的文件并配对，测试数据的名称可
 - 添加评测功能
 - 评测结果彩色显示
 - 自定义测试点时限
+
+
+
+
+
+
 
