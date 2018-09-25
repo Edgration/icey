@@ -1,6 +1,8 @@
 ##  Icey Local Judge
-****
-![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.0-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
+
+------
+
+![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.1-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
 
 欢迎使用 icey，本文档将帮助你快速上手。如果您在使用的过程中遇到了问题，请查看 FAQ 中的解答，或者在本项目下经行提问。
 
@@ -8,13 +10,13 @@
 icey [OPTION]... DATA... CODE...
 ```
 
----
+------
 
-[英文文档](README-en.md)
+[English Document](README-en.md)
 
 ### 什么是 icey ?
 
-icey 是一款轻量级的开源 OI 本地评测系统。由 [Anoxiacxy](https://anoxiacxy.github.io) 和 [Edgration](http://edgration.com/)开发
+icey 是一款轻量级的开源 OI 本地评测系统。由 [Edgration](http://edgration.com/) 和 [Anoxiacxy](https://anoxiacxy.github.io) 开发
 
 你可以用简短的几句命令，对您的程序进行快速，精确地评测，并得到一份关于评测的报告。
 
@@ -46,7 +48,7 @@ sudo rm /usr/bin/icey
 ```
 ### 使用说明
 
-#### ![](images/Screenshot-from-2018-09-23-23-41-56.png)
+![](images/Screenshot-from-2018-09-23-23-41-56.png)
 
 #### 本地评测
 

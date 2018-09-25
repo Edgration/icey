@@ -4,7 +4,7 @@
 
 ![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.1-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
 
-Welcome to use icey, this document will help you get started quickly.If you are experiencing problems during use, please check the answers in the FAQ or ask questions under this project.
+Welcome to use icey, this document will help you get started quickly. If you are experiencing problems during use, please check the answers in the FAQ or ask questions under this project.
 
 ```
 icey [OPTION]... DATA... CODE...
@@ -12,9 +12,11 @@ icey [OPTION]... DATA... CODE...
 
 ------
 
+[中文文档](README.md)
+
 ### icey?
 
-icey is a lightweight open source OI local judge system. Developed by [Anoxiacxy](https://anoxiacxy.github.io) and [Edgration](http://edgration.com/)
+icey is a lightweight open source OI local judge system. Developed by [Edgration](http://edgration.com/) and [Anoxiacxy](https://anoxiacxy.github.io).
 
 You can quickly and accurately judge your program with a few short commands and get a report on the review.
 
@@ -22,7 +24,7 @@ You can quickly and accurately judge your program with a few short commands and 
 
 It is very easy to install iecy.
 
-First download the source file of this project,After opening the folder, copy the executable file ```icey``` to the  `usr/bin/` directory for global use.
+First download the source file of this project, After opening the folder, copy the executable file `icey` to the  `usr/bin/` directory for global use.
 
 Simple commands are as follows
 
@@ -47,7 +49,7 @@ sudo rm /usr/bin/icey
 
 ### Usage
 
-#### ![](images/Screenshot-from-2018-09-23-23-41-56.png)
+![](images/Screenshot-from-2018-09-23-23-41-56.png)
 
 #### Local Judge
 
@@ -55,11 +57,11 @@ sudo rm /usr/bin/icey
 icey [OPTION]... DATA... CODE...
 ```
 
-Where ```DATA``` is a directory and ```CODE``` is a file, means use the data in the ```DATA``` directory to judge the ```CODE``` code.
+Where `DATA` is a directory and `CODE` is a file, means use the data in the `DATA` directory to judge the `CODE` code.
 
 #### About DATA
 
-`DATA`must be a no-empty directory.
+`DATA` must be a no-empty directory.
 
 This directory can be an absolute path to the system or a relative path to the current working directory.
 
@@ -74,11 +76,11 @@ which is `name` + `number` + `.in/.out` .
 
 icey will identify and pair files in this format from the directory. The name of the test data can be empty, but must have a number that matches each other.
 
-~~In addition，you can use`-i=IN`，`-o=OUT` to specify the suffix of the test data.。~~
+~~In addition，you can use`-i=IN`，`-o=OUT` to specify the suffix of the test data.~~
 
 #### About CODE
 
-`CODE`must be a no-empty file.
+`CODE` must be a no-empty file.
 
 This file can be an absolute path to the system or a relative path to the current working directory.
 
@@ -113,7 +115,7 @@ Final result
 
 - AK：All Killed, passed all tests.
 - PC：Partially Correct.
-- GG：Exploded.Unfortunately, you got zero point.
+- GG：Exploded. Unfortunately, you got zero point.
 
 ### FAQ
 

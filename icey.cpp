@@ -16,7 +16,7 @@ namespace constant {
 	string IN_SUFFIX = ".in";
 	string OUT_SUFFIX = ".out";
 	//string PREFIX = "";
-	string COMPLIE_ARGUMENT = "";
+	string COMPILE_ARGUMENT = "";
 	string EXE = ".exe";
 	string OUT = ".out";
 	string ERR = ".err";
@@ -143,7 +143,8 @@ Mandatory arguments to long options are mandatory for short options too.
 */
 
 namespace option {
-	bool help_check(string &str) { return str == "-h" || str == "--help";  }
+	//to check if the str is about help
+	bool help_check(string &str) { return str == "-h" || str == "--help";  } 
 	void help_print() {
 		cout << "Usage: icey [OPTION]... DATA... CODE..." << endl;
 		cout << "Judge the code with data and illustrate the results with a chart" << endl;
@@ -158,8 +159,9 @@ namespace option {
 		cout << "  -v, --version  output version information and exit" << endl;
 		cout << endl;
 	}
-
-	bool version_check(string &str) { return str == "-v" || str == "--version"; }
+	
+	//to check if the str is about version
+	bool version_check(string &str) { return str == "-v" || str == "--version"; } 
 	void version_print() {
 		cout << "icey (LocalJudge) " << VERSION << endl;
 		cout << "Copyright (C) 2018 " << endl;
@@ -167,7 +169,8 @@ namespace option {
 		cout << "        Edgration <https://edgration.com>" << endl;
 		cout << "        Anoxiacxy <https://anoxiacxy.github.io>" << endl;
 	}
-
+	
+	//to check if the str is about time set
 	bool time_check(string str) { return start_with(str, "-t") || start_with(str, "--time"); }
 	void time_set(string str) {
 		int pos = str.find('=');
@@ -179,22 +182,24 @@ namespace option {
 		istringstream sin(str.substr(pos + 1, str.length() - pos - 1));
 		sin >> TIME;
 	}
-	bool complie_check(string str) { return start_with(str, "-c") || start_with(str, "-C"); }
-	void complie_set(string str) {
+	
+	//to check if the str is about compile options
+	bool compile_check(string str) { return start_with(str, "-c") || start_with(str, "-C"); }
+	void compile_set(string str) {
 		if (str.length() <= 2) {
 			if (start_with(str, "-c")) { argument_missing_print("-c"); exit(-1); }
 			if (start_with(str, "-C")) { argument_missing_print("-C"); exit(-1); }
 			error_print(str); exit(0);
 		}
 		str = "-" + str.substr(2, str.length() - 2);
-		COMPLIE_ARGUMENT += str + " ";
+		COMPILE_ARGUMENT += str + " ";
 	}
 } using namespace option;
 
 namespace check {
-	void complie(string data_dir, string code_dir) {
+	void compile(string data_dir, string code_dir) {
 		ostringstream cmd;
-		cmd << "g++ " << COMPLIE_ARGUMENT << " " << code_dir;
+		cmd << "g++ " << COMPILE_ARGUMENT << " " << code_dir;
 		cmd << " -o " << data_dir << "/" << EXE << " 2> " << data_dir << "/" << ERR << endl;
 		system(cmd.str().c_str()); 
 	}
@@ -220,7 +225,7 @@ namespace check {
 			
 			name = show_center(name, 12);
 			string time_s(tmp), score_s; 
-			if (score == int(score))
+			if (fabs(score - int(score)) < 0.01)
 				score_s = show_center(to_string(int(score)), 5);
 			else {
 				sprintf(tmp, "%.1f", score);
@@ -246,7 +251,7 @@ namespace check {
 			rst.time = -1;
 			return rst;
 		}
-		if (access((data_dir + "/" + data_test.first).c_str(), 0) == -1 ||//UKE
+		if (access((data_dir + "/" + data_test.first).c_str(), 0) == -1 ||
 			access((data_dir + "/" + data_test.second).c_str(), 0) == -1) {//UKE
 			rst.type = UKE;
 			rst.score = 0;
@@ -259,11 +264,9 @@ namespace check {
 		codepid = fork();
 		if (codepid == 0) {			
 			ostringstream cmd;
-			
 			cmd << "cd " << data_dir << endl;			
 			cmd << "./" << EXE << " < " << data_test.first << " 1> " << OUT << " 2>" << ERR << endl;
 			system(cmd.str().c_str());
-			
 			exit(EXIT_SUCCESS);
 		}
 		timepid = fork();
@@ -342,7 +345,7 @@ namespace check {
 			test_data.begin()->second.first : test_data.begin()->second.second;
 		for (int i = 0; i < temp.length() && !isdigit(temp[i]); i++) name += temp[i];
 			
-		complie(data_dir, code_dir);
+		compile(data_dir, code_dir);
 				
 		cout << show_center("--- " + name + " ---", 80) << endl;		
 		cout << "================================================================================" << endl;			
@@ -394,7 +397,7 @@ int main (int argc, char const* argv[]) {
 		else 
 		if (time_check(str)) { time_set(str); }
 		else 
-		if (complie_check(str)) { complie_set(str); }
+		if (compile_check(str)) { compile_set(str); }
 		else { invalid_print(str); exit(-1); }
 	}
 			
