@@ -12,7 +12,7 @@ using namespace std;
 
 namespace constant {
 	double TIME = 1;
-	string VERSION = "1.1.1";
+	string VERSION = "1.1.2";
 	string IN_SUFFIX = ".in";
 	string OUT_SUFFIX = ".out";
 	//string PREFIX = "";
@@ -174,7 +174,7 @@ namespace option {
 	bool time_check(string str) { return start_with(str, "-t") || start_with(str, "--time"); }
 	void time_set(string str) {
 		int pos = str.find('=');
-		if (pos == -1) {
+		if (pos == -1 || pos == str.length() - 1) {
 			if (start_with(str, "-t")) { argument_missing_print("-t"); exit(-1); }
 			if (start_with(str, "--time")) { argument_missing_print("--time"); exit(-1); }
 			error_print(str); exit(0);
@@ -204,10 +204,10 @@ namespace check {
 		system(cmd.str().c_str()); 
 	}
 
-	void clean(string data_dir) {
+	void clean(string data_dir, bool all = true) {
 		ostringstream cmd;
 		cmd << "cd " << data_dir << endl;
-		cmd << "rm " << EXE << " 2> " << ERR << endl;
+		if (all) cmd << "rm " << EXE << " 2> " << ERR << endl;
 		cmd << "rm " << OUT << " 2> " << ERR << endl;
 		cmd << "rm " << ERR << endl;
 		system(cmd.str().c_str());
@@ -244,6 +244,9 @@ namespace check {
 	};
 
 	struct Result test(string data_dir, pair<string, string>data_test) {
+	
+		
+			
 		Result rst;
 		if (access((data_dir + "/" + EXE).c_str(), 0) == -1) {//CE
 			rst.type = CE;
@@ -290,6 +293,7 @@ namespace check {
 			rst.time = -1;
 			rst.type = TLE;
 			rst.score = 0;
+			clean(data_dir, false);
 			return rst;
 		}
 		

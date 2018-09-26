@@ -2,7 +2,7 @@
 
 ------
 
-![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.1-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
+![](https://img.shields.io/badge/build-passing-brightgreen.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/size-<1MB-00BFFF.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/icey-%20v1.1.2-blue.svg?longCache=true&style=flat-square) ![](https://img.shields.io/badge/price-$0-C0C0C0.svg?longCache=true&style=flat-square)
 
 欢迎使用 icey，本文档将帮助你快速上手。如果您在使用的过程中遇到了问题，请查看 FAQ 中的解答，或者在本项目下经行提问。
 
@@ -130,6 +130,10 @@ icey 会从目录中识别此格式的文件并配对，测试数据的名称可
 
 
 ### 更新日志
+
+#### v1.1.2
+
+- 修复了出现 TLE 后无法正常评测的 BUG
 
 #### v1.1.1
 
