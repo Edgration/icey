@@ -76,7 +76,7 @@ which is `name` + `number` + `.in/.out` .
 
 icey will identify and pair files in this format from the directory. The name of the test data can be empty, but must have a number that matches each other.
 
-~~In addition，you can use`-i=IN`，`-o=OUT` to specify the suffix of the test data.~~
+In addition，you can use`-i=IN`，`-o=OUT` to specify the suffix of the test data.
 
 #### About CODE
 
@@ -98,6 +98,8 @@ These parameters are optional and can be added as needed when you need them.
 |   -v, --version   | Display version information of icey                          |
 | -t, --time=SECOND | You can set the time limit for each test data in seconds, which can be a floating point number. The default is 1 |
 |    -c, -C[opt]    | You can add compile options. For example, you want to add `-O2`, you can add the parameter `-CO2`.If you want to use `c++11`, the compile option `-std=c++11`, you can add the parameter `-Cstd=c++11` |
+| -i, -I[name] | You can modify the input file suffix name, for example, you want to change to `input`, you can add the parameter `-Iinput`, the default is .in |
+| -o, -O[name] | You can modify the output file suffix name. For example, if you want to change to `ans`, you can add the parameter `-Oans`, the default is .out |
 
 #### About judge result
 
