@@ -123,9 +123,17 @@ Final result
 
 ### Update log
 
+#### v2.0.0
+
+- Fixed a bug that the background .exe process could not automatically close caused system and caused the system crashed
+
+- Added custom file suffix option, now you can customize the suffix name of the input and output files
+
+- Beautify the -h and -v and error messages, partially add highlight and underline
+
 #### v1.1.2
 
-- Repairing the BUG that the judge result cannot go well after get TLE
+- Fixed the BUG that the judge result cannot go well after get TLE
 
 #### v1.1.1
 
@@ -141,8 +149,8 @@ Final result
 
 #### v1.0.2
 
-- It is now possible to judge both relative and absolute paths at the same time.
-- Slightly modify the display effect of the score and the result of the zero point.
+- It is now possible to judge both relative and absolute paths at the same time
+- Slightly modify the display effect of the score and the result of the zero point
 
 #### v1.0.1
 

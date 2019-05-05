@@ -12,9 +12,10 @@ using namespace std;
 
 namespace constant {
 	double TIME = 1;
-	string VERSION = "1.1.2";
+	string VERSION = "2.1.0";
 	string IN_SUFFIX = ".in";
 	string OUT_SUFFIX = ".out";
+	string TRASH = ".trash";
 	//string PREFIX = "";
 	string COMPILE_ARGUMENT = "";
 	string EXE = ".exe";
@@ -36,29 +37,35 @@ namespace constant {
 
 namespace error {
 	void access_fail(string str) {
-		cout << "icey: cannot access '" << str << "': No such file or directory" << endl;
+		cout << "\33[1micey\33[0m: cannot access '" << str << "': No such file or directory" << endl;
 	}
 	void cannot_find_data(string str) {
-		cout << "icey: cannot find data at " << str << endl;
+		cout << "\33[1micey\33[0m: cannot find data at " << str << endl;
+	}
+	void cannot_find_file(string str) {
+		cout << "\33[1micey\33[0m: cannot find file " << str << endl;
+	}
+	void cannot_find_suffix() {
+		cout << "\33[1micey\33[0m: cannot find suffix " << IN_SUFFIX << " or " << OUT_SUFFIX << endl;
 	}
 	void data_code_missing_print() {
-		cout << "icey: missing data or code operand" << endl;
+		cout << "\33[1micey\33[0m: missing data or code operand" << endl;
 		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void argument_missing_print(string str) {
-		cout << "icey: option requires an argument -- '" << str << "'" << endl;
+		cout << "\33[1micey\33[0m: option requires an argument -- '" << str << "'" << endl;
 		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void invalid_print(string str) {
-		cout << "icey: invalid option -- '" << str << "'" << endl;
+		cout << "\33[1micey\33[0m: invalid option -- '" << str << "'" << endl;
 		cout << "Try 'icey --help' for more information." << endl;
 	}
 	void error_print(string str) {
-		cout << "icey: some thing error at '" << str << "'" << endl;
+		cout << "\33[1micey\33[0m: some thing error at '" << str << "'" << endl;
 		cout << "Try 'icey --help' for more information." << endl; 
 	}
   	void system_error() {
-  		cout << "icey: unknown system error" << endl;
+  		cout << "\33[1micey\33[0m: unknown system error" << endl;
   	}
 } using namespace error;
 
@@ -146,28 +153,32 @@ namespace option {
 	//to check if the str is about help
 	bool help_check(string &str) { return str == "-h" || str == "--help";  } 
 	void help_print() {
-		cout << "Usage: icey [OPTION]... DATA... CODE..." << endl;
-		cout << "Judge the code with data and illustrate the results with a chart" << endl;
+		cout << "\33[1mUsage:\33[0m" << endl;
+		cout << "  icey \33[4m[OPTION]\33[0m... \33[4mDATA\33[0m... \33[4mCODE\33[0m..." << endl;
+		cout << "  Judge the code with data and illustrate the results with a chart" << endl;
 		cout << endl;
-		cout << "Mandatory arguments to long options are mandatory for short options too." << endl;
+		cout << "\33[1mOptions:\33[0m" << endl;
+		cout << "  Mandatory arguments to long options are mandatory for short options too." << endl;
 		cout << endl;
-		cout << "  -c, -C...              add some compilation options you need for g++ " << endl;
+		cout << "  -c, -C\33[4mOPTION\33[0m           add some compilation options you need for g++ " << endl;
 		cout << "                         '-CO2 -Cstd=c++11' will represent '-O2 -std=c++11'" << endl;
-		cout << "  -t, --time=SECOND      set the time limit of each test with a variable" << endl;
+		cout << "  -i, -I\33[4mNAME\33[0m             set input data suffix name, default will be \".in\"" << endl;
+		cout << "  -o, -O\33[4mNAME\33[0m             set output data suffix name, default will be \".out\"" << endl;                       
+		cout << "  -t, --time=\33[4mSECOND\33[0m      set the time limit of each test with a variable" << endl;
 		cout << "                         of type double, default value will be 1 second" << endl;
-		cout << "  -h, --help     display this help and exit" << endl;
-		cout << "  -v, --version  output version information and exit" << endl;
+		cout << "  -h, --help             display this help and exit" << endl;
+		cout << "  -v, --version          output version information and exit" << endl;
 		cout << endl;
 	}
 	
 	//to check if the str is about version
 	bool version_check(string &str) { return str == "-v" || str == "--version"; } 
 	void version_print() {
-		cout << "icey (LocalJudge) " << VERSION << endl;
-		cout << "Copyright (C) 2018 " << endl;
+		cout << "\33[1micey\33[0m (LocalJudge) " << VERSION << endl;
+		cout << "Copyright (C) 2018~2019 " << endl;
 		cout << "Code by" << endl; 
-		cout << "        Edgration <https://edgration.com>" << endl;
-		cout << "        Anoxiacxy <https://anoxiacxy.github.io>" << endl;
+		cout << "        Edgration \33[4m<https://edt-x.me>\33[0m" << endl;
+		cout << "        Anoxiacxy \33[4m<https://anoxiacxy.github.io>\33[0m" << endl;
 	}
 	
 	//to check if the str is about time set
@@ -194,6 +205,26 @@ namespace option {
 		str = "-" + str.substr(2, str.length() - 2);
 		COMPILE_ARGUMENT += str + " ";
 	}
+	bool input_check(string str) { return start_with(str, "-i") || start_with(str, "-I"); }
+	void input_set(string str) {
+		if (str.length() <= 2) {
+			if (start_with(str, "-i")) { argument_missing_print("-i"); exit(-1); }
+			if (start_with(str, "-I")) { argument_missing_print("-I"); exit(-1); }
+			error_print(str); exit(0);
+		}
+		str = str.substr(2, str.length() - 2);
+		IN_SUFFIX = "." + str;
+	}
+	bool output_check(string str) { return start_with(str, "-o") || start_with(str, "-O"); }
+	void output_set(string str) {
+		if (str.length() <= 2) {
+			if (start_with(str, "-o")) { argument_missing_print("-o"); exit(-1); }
+			if (start_with(str, "-O")) { argument_missing_print("-O"); exit(-1); }
+			error_print(str); exit(0);
+		}
+		str = str.substr(2, str.length() - 2);
+		OUT_SUFFIX = "." + str;
+	}
 } using namespace option;
 
 namespace check {
@@ -210,6 +241,7 @@ namespace check {
 		if (all) cmd << "rm " << EXE << " 2> " << ERR << endl;
 		cmd << "rm " << OUT << " 2> " << ERR << endl;
 		cmd << "rm " << ERR << endl;
+		cmd << "rm " << TRASH << endl;
 		system(cmd.str().c_str());
 	}
 	
@@ -244,9 +276,6 @@ namespace check {
 	};
 
 	struct Result test(string data_dir, pair<string, string>data_test) {
-	
-		
-			
 		Result rst;
 		if (access((data_dir + "/" + EXE).c_str(), 0) == -1) {//CE
 			rst.type = CE;
@@ -285,8 +314,9 @@ namespace check {
 		rst.time = time.tv_sec + time.tv_usec / 1e6;
 				
 		kill(timepid ^ codepid ^ firstpid, SIGKILL);
+		kill(timepid ^ codepid ^ firstpid, SIGKILL);
+		system(("killall .exe 2>" + TRASH).c_str());
 		
-		wait(NULL);
 		wait(NULL);
 		
 		if (firstpid == timepid) {//TLE
@@ -337,8 +367,7 @@ namespace check {
 		for (auto str : data_list) {
 			if (end_with(str, IN_SUFFIX)) 
 				test_data[read_num(str)].first = str;	
-			
-			if (end_with(str, OUT_SUFFIX)) 
+			else if (end_with(str, OUT_SUFFIX)) 
 				test_data[read_num(str)].second = str;	
 		}
 		
@@ -348,6 +377,17 @@ namespace check {
 		string temp = test_data.begin()->second.first.length() ? 
 			test_data.begin()->second.first : test_data.begin()->second.second;
 		for (int i = 0; i < temp.length() && !isdigit(temp[i]); i++) name += temp[i];
+			
+		int exsit_cnt = 0;
+		for (auto test_p : test_data) {
+			if (!test_p.second.first.size() || !test_p.second.first.size()) continue;
+			if (!end_with(test_p.second.first, IN_SUFFIX) || 
+			!end_with(test_p.second.second, OUT_SUFFIX)) continue;
+			exsit_cnt++;
+		}	
+		if (exsit_cnt == 0) {
+			cannot_find_suffix(), exit(-1);
+		}	
 			
 		compile(data_dir, code_dir);
 				
@@ -362,7 +402,6 @@ namespace check {
 		bool ak = true, gg = true;
 		
 		for (auto test_p : test_data) {
-			
 			struct Result rst = test(data_dir, test_p.second);
 			rst.name = name + to_string(test_p.first);
 			rst.score *= (1.0 / test_data.size());
@@ -402,6 +441,10 @@ int main (int argc, char const* argv[]) {
 		if (time_check(str)) { time_set(str); }
 		else 
 		if (compile_check(str)) { compile_set(str); }
+		else 
+		if (input_check(str)) { input_set(str); }
+		else 
+		if (output_check(str)) { output_set(str); }
 		else { invalid_print(str); exit(-1); }
 	}
 			
